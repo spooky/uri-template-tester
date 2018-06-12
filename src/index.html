@@ -110,7 +110,7 @@
     <header class="info">URI template tester</header>
 
     <main class="deck">
-      <form id="form" action="/">
+      <form id="form" action="/" onsubmit="site.run(event)">
         <p><input type="text" id="template" value="http://example.org/{file}" autofocus></input></p>
         <p><textarea id="context">{"file": "hello world.html"}</textarea></p>
         <p><button type="submit">Run</button></p>
@@ -123,26 +123,24 @@
 
     <script src="URI.js" async></script>
     <script type="text/javascript">
-      (function() {
-        let form = document.getElementById('form');
-
-        form.onsubmit = event => {
+      window.site = {
+        run: function(event) {
           event.preventDefault();
 
-          let t = document.getElementById('template'),
+          var t = document.getElementById('template'),
               c = document.getElementById('context'),
               o = document.getElementById('output');
 
           try {
-            let template = new URITemplate(t.value);
+            var template = new URITemplate(t.value);
             o.className = 'ok';
             o.innerText = template.expand(JSON.parse(c.value));
           } catch(err) {
             o.className = 'err';
             o.innerText = err;
           }
-        };
-      })();
+        }
+      }
     </script>
   </body>
 </html>
