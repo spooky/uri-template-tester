@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>URI Template tester</title>
+    <meta name="description" content="URI Template tester">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+    <style type="text/css">
+      :root {
+        --color-light: #c5c1c0;
+        --color-dark: #0a1612;
+        --color-alt: #1a2930;
+        --color-accent: #f7ce3e;
+        --color-ok: #66f73e;
+        --color-err: #f73e3e;
+      }
+      html, body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--color-dark) url(bg.jpg) no-repeat fixed center/cover;
+        color: var(--color-light);
+        font-family: 'Muli', sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+      .info, footer {
+        padding: 1em;
+      }
+      .info {
+        font-size: large;
+      }
+      footer {
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .deck {
+        box-sizing: border-box;
+        width: 960px;
+        max-width: 100%;
+        padding: 0 1em;
+        margin: 0 auto;
+        position: relative;
+        flex: 1 0 auto;
+      }
+      a {
+        color: var(--color-light);
+        text-decoration: none;
+        font-variant: small-caps;
+      }
+      a:hover, a:focus {
+        color: var(--color-accent);
+      }
+      input, textarea, button {
+        -webkit-box-shadow: 0px 0px 12px 0px var(--color-alt);
+        -moz-box-shadow: 0px 0px 12px 0px var(--color-alt);
+        box-shadow: 0px 0px 12px 0px var(--color-alt);
+        font-family: 'Muli', sans-serif;
+        box-sizing: border-box;
+      }
+      input, textarea {
+        font-size: 1em;
+        width: 100%;
+        padding: .5em;
+        color: var(--color-light);
+        background: var(--color-alt);
+        border: 1px solid var(--color-light);
+      }
+      input:focus, textarea:focus {
+        border-color: var(--color-accent);
+        outline: none;
+      }
+      textarea {
+        height: 200px;
+        resize: vertical;
+      }
+      button {
+        font-size: 1em;
+        padding: .3em 1em;
+        cursor: pointer;
+        color: var(--color-dark);
+        background: var(--color-accent);
+        border: 1px solid var(--color-accent);
+      }
+      p {
+        text-align: right;
+      }
+      pre {
+        padding: 1em;
+        background: var(--color-alt);
+        border: 1px solid;
+        visibility: hidden;
+      }
+      .ok {
+        border-color: var(--color-ok);
+        visibility: visible;
+      }
+      .err {
+        border-color: var(--color-err);
+        visibility: visible;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="info">URI template tester</header>
+
+    <main class="deck">
+      <form id="form" action="/">
+        <p><input type="text" id="template" value="http://example.org/{file}" autofocus></input></p>
+        <p><textarea id="context">{"file": "hello world.html"}</textarea></p>
+        <p><button type="submit">Run</button></p>
+      </form>
+
+      <pre id="output"></pre>
+    </main>
+
+    <footer>powered by <a href="https://medialize.github.io/URI.js/">URI.js</a></footer>
+
+    <script src="URI.js" async></script>
+    <script type="text/javascript">
+      (function() {
+        let form = document.getElementById('form');
+
+        form.onsubmit = event => {
+          event.preventDefault();
+
+          let t = document.getElementById('template'),
+              c = document.getElementById('context'),
+              o = document.getElementById('output');
+
+          try {
+            let template = new URITemplate(t.value);
+            o.className = 'ok';
+            o.innerText = template.expand(JSON.parse(c.value));
+          } catch(err) {
+            o.className = 'err';
+            o.innerText = err;
+          }
+        };
+      })();
+    </script>
+  </body>
+</html>
