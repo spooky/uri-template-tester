@@ -1,0 +1,4 @@
+[submodule "dist"]
+	path = dist
+	url = git@github.com:spooky/uri-template-tester.git
+	branch = gh-pages
