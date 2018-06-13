@@ -7,7 +7,7 @@
   "scripts": {
     "mkdist": "if not exist dist mkdir dist",
     "minify": "npm run mkdist && html-minifier src/index.html --collapse-whitespace --minify-css --minify-js -o dist/index.html",
-    "copy": "npm run mkdist && copy src\\*.jpg dist && copy src\\*.js dist",
+    "copy": "npm run mkdist && copy src\\*.jpg dist && copy src\\*.png dist && copy src\\*.ico dist && copy src\\*.js dist && copy src\\*.webmanifest dist ",
     "build": "npm run minify && npm run copy"
   },
   "author": "Krzysztof Szczęsny",
