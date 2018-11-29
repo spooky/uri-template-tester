@@ -90,6 +90,7 @@
       }
       p {
         text-align: right;
+        position: relative;
       }
       pre {
         padding: 1em;
@@ -105,6 +106,11 @@
         border-color: var(--color-err);
         visibility: visible;
       }
+      #format {
+        position: absolute;
+        top: .6em;
+        right: .6em;
+      }
     </style>
   </head>
 
@@ -114,7 +120,10 @@
     <main class="deck">
       <form id="form" action="/" onsubmit="site.run(event)">
         <p><input type="text" id="template" value="http://example.org/{file}" autofocus></input></p>
-        <p><textarea id="context">{"file": "hello world.html"}</textarea></p>
+        <p>
+          <textarea id="context">{"file": "hello world.html"}</textarea>
+          <a href="" id="format" title="format" onclick="site.format(event)">&otimes;</a>
+        </p>
         <p><button type="submit">Run</button></p>
       </form>
 
@@ -126,23 +135,38 @@
     <script src="URI.js" async></script>
     <script type="text/javascript">
       window.site = {
+        t: document.getElementById('template'),
+        c: document.getElementById('context'),
+        o: document.getElementById('output'),
         run: function(event) {
-          event.preventDefault();
-
-          var t = document.getElementById('template'),
-              c = document.getElementById('context'),
-              o = document.getElementById('output');
+          this._exec(
+            event,
+            function() {
+              var template = new URITemplate(this.t.value);
+              this.o.innerText = template.expand(JSON.parse(this.c.value));
+              this.o.className = 'ok';
+            }
+          );
+        },
+        format: function(event) {
+          this._exec(
+            event,
+            function() { this.c.value = JSON.stringify(JSON.parse(this.c.value), null, 2) }
+          );
+        },
+        _exec: function(event, cb) {
+          if (event) event.preventDefault();
 
           try {
-            var template = new URITemplate(t.value);
-            o.className = 'ok';
-            o.innerText = template.expand(JSON.parse(c.value));
+            cb.call(this)
           } catch(err) {
-            o.className = 'err';
-            o.innerText = err;
+            this.o.className = 'err';
+            this.o.innerText = err;
           }
         }
-      }
+      };
+
+      window.site.format();
     </script>
   </body>
 </html>
